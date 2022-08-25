@@ -1,10 +1,18 @@
+const request = require('request')
 const fs = require('fs');
 
-const content = 'Some content!';
+const path = process.argv[3];
+const domain = process.argv[2];
 
-fs.writeFile('/Users/joe/test.txt', content, err => {
-  if (err) {
-    console.error(err);
+request(domain, (error, response, body) => {
+  if (error) {
+    console.log('error:', error);
   }
-  // file written successfully
+fs.writeFile(`${path}`, body, function(error) {
+  if (error) {
+    console.error('error:', error);
+  } else {
+    console.log(`Downloaded and saved ${response.headers["content-length"]} bytes to ${path}`);
+    }
+  });
 });
